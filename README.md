@@ -339,3 +339,24 @@ process:
 
 
 
+### 1.6 Predicates
+
+> So far, we have only been dealing with **data patterns**: `[?m :movie/year ?year]`. We have not yet seen a proper way of handling questions like "*Find all movies released before 1984*". This is where **predicate clauses** come into play.
+
+
+
+***Practice1:*** Find movies older than a certain year (inclusive)
+
+```
+[:find ?title
+ :in $ ?inputYear
+ :where
+ [?m :movie/title ?title]
+ [?m :movie/year ?year]
+ [(<= ?year ?inputYear)]]
+```
+
+
+
+
+
