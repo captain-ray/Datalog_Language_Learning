@@ -39,12 +39,12 @@
  [_ :movie/title ?title]]
 ```
 
-| element                 | type    |
-| ----------------------- | ------- |
-| :find                   | keyword |
-| ?title                  | symbol  |
-| :where                  | keyword |
-| [_ :movie/title ?title] | vector  |
+| element                  | type    |
+| ------------------------ | ------- |
+| :find                    | keyword |
+| ?title                   | symbol  |
+| :where                   | keyword |
+| [ _ :movie/title ?title] | vector  |
 
 ***Result:***
 
@@ -182,6 +182,98 @@
  [?m :movie/director ?d]
  [?d :person/name ?name]]
 ```
+
+
+
+### 1.4 Parameterized queries
+
+> query with an input parameter for the actor
+>
+> ```
+> [:find ?title
+>  :in $ ?name
+>  :where
+>  [?p :person/name ?name]
+>  [?m :movie/cast ?p]
+>  [?m :movie/title ?title]]
+> ```
+>
+> Tuples: A tuple input is written as e.g. `[?name ?age]` and can be used when you want to destructure an input. Let's say you have the vector `["James Cameron" "Arnold Schwarzenegger"]` and you want to use this as input to find all movies where these two people collaborated
+>
+> Collections: You can use collection destructuring to implement a kind of logical **or** in your query. Say you want to find all movies directed by either James Cameron **or** Ridley Scott
+>
+> Relations: a set of tuples - are the most interesting and powerful of input types, since you can join external relations with the datoms in your database.
+
+
+
+***Practice1:*** Find movie title by year
+
+```
+[:find ?title
+ :in $ ?year
+ :where
+ [?m :movie/year ?year]
+ [?m :movie/title ?title]]
+```
+
+***Result1:***
+
+![5](demo_images/5.png)
+
+****
+
+
+
+***Practice2:*** Given a list of movie titles, find the title and the year that movie was released.
+
+```
+[:find ?title ?year
+ :in $ [?title ...]
+ :where
+ [?m :movie/title ?title]
+ [?m :movie/year ?year]]
+```
+
+
+
+***Practice3:*** Find all movie `?title`s where the `?actor` and the `?director` has worked together
+
+```
+[:find ?title
+ :in $ ?actor ?director
+ :where
+ [?a :person/name ?actor]
+ [?d :person/name ?director]
+ [?m :movie/cast ?a]
+ [?m :movie/director ?d]
+ [?m :movie/title ?title]]
+```
+
+process:
+
+1. input actor and director seperately
+2. find actorID and directorID based on name
+3. find movieID related to the actorID and directorID
+4. find movie title based on movieID
+
+
+
+***Practice4:*** Write a query that, given an actor name and a relation with movie-title/rating, finds the movie titles and corresponding rating for which that actor was a cast member.
+
+```
+[:find ?title ?rating
+ :in $ ?actor [[?title ?rating]]
+ :where
+ [?a :person/name ?actor]
+ [?m :movie/cast ?a]
+ [?m :movie/title ?title]]
+```
+
+process:
+
+1. find actorID based on actor name
+2. find movieID based on actorID
+3. find movieID based on title
 
 
 
