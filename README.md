@@ -31,7 +31,7 @@
 
 
 
-***Example:*** "Find all movies titles in the database"
+***Practice:*** "Find all movies titles in the database"
 
 ```
 [:find ?title
@@ -87,7 +87,7 @@
 
 
 
-***Example1:*** Find the entity ids of movies made in 1987
+***Practice1:*** Find the entity ids of movies made in 1987
 
 ```
 [:find ?e
@@ -95,13 +95,9 @@
 [e? :movie/year 1987]]
 ```
 
-***Result1:*** 
-
-![2](demo_images/2.png)
 
 
-
-***Example2:*** Find the entity-id and titles of movies in the database
+***Practice2:*** Find the entity-id and titles of movies in the database
 
 ```
 [:find ?e ?title
@@ -109,13 +105,9 @@
  [?e :movie/title ?title ]]
 ```
 
-***Result2:*** 
-
-![3](demo_images/3.png)
 
 
-
-***Example3:*** Find the name of all people in the database
+***Practice3:*** Find the name of all people in the database
 
 ```
 [:find ?name
@@ -123,7 +115,73 @@
  [?p :person/name ?name]]
 ```
 
-***result3:***
+***Result3:***
 
 ![4](demo_images/4.png)
+
+
+
+### 1.3 Data patterns
+
+>In the previous chapter, we looked at **data patterns**, i.e., vectors after the `:where` clause, such as `[?e :movie/title "Commando"]`. There can be many data patterns in a `:where` clause:
+>
+>```
+>[:find ?title
+> :where
+> [?e :movie/year 1987]
+> [?e :movie/title ?title]]
+>```
+>
+>he important thing to note here is that the pattern variable `?e` is used in both data patterns. When a pattern variable is used in multiple places, the query engine requires it to be bound to the same value in each place. Therefore, this query will only find movie titles for movies made in 1987.
+>
+>The order of the data patterns does not matter.
+
+
+
+***Practice1:***  Find movie titles made in 1985
+
+```
+[:find ?title
+ :where
+ [?e :movie/year 1985]
+ [?e :movie/title ?title]]
+```
+
+
+
+***Practice2:*** What year was "Alien" released?
+
+```
+[:find ?year
+ :where
+ [?m :movie/title "Alien"]
+ [?m :movie/year ?year]]
+```
+
+
+
+***Practice3:*** Who directed RoboCop? You will need to use `[<movie-eid> :movie/director <person-eid>]` to find the director for a movie.
+
+```
+[:find ?name
+ :where
+ [?m :movie/title "RoboCop"]
+ [?m :movie/director ?p]
+ [?p :person/name ?name]]
+```
+
+
+
+***Practice4:*** Find directors who have directed Arnold Schwarzenegger in a movie.
+
+```
+[:find ?name
+ :where
+ [?p :person/name "Arnold Schwarzenegger"]
+ [?m :movie/cast ?p]
+ [?m :movie/director ?d]
+ [?d :person/name ?name]]
+```
+
+
 
