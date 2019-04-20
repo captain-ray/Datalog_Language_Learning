@@ -1,6 +1,12 @@
 # Datalog language learning.
 
-***I follow '[LearnDatalogToday](http://www.learndatalogtoday.org/)' tutorial to practice.*** 
+### ***Summary***
+
+As I followed the tutorial to practice and get into knowing how datalog language works, interestingly I found it is more convinient and concise than SQL.
+
+
+
+**I follow '[LearnDatalogToday](http://www.learndatalogtoday.org/)' tutorial to practice.*** 
 
 > **Learn Datalog Today** is an interactive tutorial designed to teach you the [Datomic](http://datomic.com/) dialect of [Datalog](http://en.wikipedia.org/wiki/Datalog). Datalog is a declarative **database query language** with roots in logic programming. Datalog has similar expressive power as [SQL](http://en.wikipedia.org/wiki/Sql).
 >
@@ -274,6 +280,62 @@ process:
 1. find actorID based on actor name
 2. find movieID based on actorID
 3. find movieID based on title
+
+
+
+### 1.5 More queries
+
+> A datom, as described earlier, is the 4-tuple `[eid attr val tx]`. So far, we have only asked questions about values and/or entity-ids. It's important to remember that it's also possible to ask questions about attributes and transactions.
+>
+> 
+>
+> Attributes: For example, say we want to find all attributes that are associated with person entities in our database. We know for certain that `:person/name` is one such attribute, but are there others we have not yet seen? [attributes are also entities in our database!]
+>
+> 
+>
+> Transactions:It's also possible to run queries to find information about transactions, such as:
+>
+> - When was a fact asserted?
+> - When was a fact retracted?
+> - Which facts were part of a transaction?
+> - Etc.
+>
+> The transaction entity is the fourth element in the datom vector. The only attribute associated with a transaction (by default) is `:db/txInstant` which is the instant in time when the transaction was committed to the database.
+
+
+
+***Practice1:*** What attributes are associated with a given movie.
+
+```
+[:find ?attr
+ :in $ ?title
+ :where
+ [?m :movie/title ?title]
+ [?m ?a]
+ [?a :db/ident ?attr]]
+```
+
+
+
+***Practice2:*** Find the names of all people associated with a particular movie (i.e. both the actors and the directors)
+
+```
+[:find ?name
+ :in $ ?title [?attr ...]
+ :where
+ [?m :movie/title ?title]
+ [?m ?attr ?p]
+ [?p :person/name ?name]] 
+```
+
+***Practice3:*** When was the seed data imported into the database? Grab the transaction of any datom in the database, e.g., `[_ :movie/title _ ?tx]` and work from there.
+
+```
+[:find ?inst
+ :where
+ [_ :movie/title _ ?tx]
+ [?tx :db/txInstant ?inst]]
+```
 
 
 
