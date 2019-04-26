@@ -360,3 +360,61 @@ process:
 
 
 
+### 1.7 Transformation functions
+
+> **Transformation functions** are pure (= side-effect free) functions or methods which can be used in queries to transform values and bind their results to pattern variables. Say, for example, there exists an attribute `:person/born` with type `:db.type/instant`. Given the birthday, it's easy to calculate the (very approximate) age of a person:
+>
+> ```js
+> (defn age [birthday today]
+>   (quot (- (.getTime today)
+>            (.getTime birthday))
+>         (* 1000 60 60 24 365)))
+> ```
+
+
+
+***Practice1*:** Find people by age. Use the function `tutorial.fns/age` to find the age given a birthday and a date representing "today".
+
+```
+[:find ?name
+ :in $ ?age ?today
+ :where
+ [?p :person/name ?name]
+ [?p :person/born ?born]
+ [(tutorial.fns/age ?born ?today) ?age]]
+```
+
+
+
+***Practice2:*** Find people by age. Use the function `tutorial.fns/age` to find the age given a birthday and a date representing "today".
+
+```
+[:find ?name ?age
+ :in $ ?today
+ :where
+ [?p :person/name "Bruce Willis"]
+ [?p :person/born ?sborn]
+ [?p2 :person/name ?name]
+ [?p2 :person/born ?born]
+ [(< ?sborn ?born)]
+ [(tutorial.fns/age ?born ?today) ?age]]
+```
+
+
+
+***Practice3:*** The birthday paradox states that in a room of 23 people there is a 50% chance that someone has the same birthday. Write a query to find who has the same birthday. Use the `<` predicate on the names to avoid duplicate answers. You can use (the deprecated) `.getDate` and `.getMonth` java `Date` methods.
+
+```
+[:find ?name-1 ?name-2
+ :where
+ [?p1 :person/name ?name-1]
+ [?p2 :person/name ?name-2]
+ [?p1 :person/born ?born-1]
+ [?p2 :person/born ?born-2]
+ [(.getDate ?born-1) ?d]
+ [(.getDate ?born-2) ?d]
+ [(.getMonth ?born-1) ?m]
+ [(.getMonth ?born-2) ?m]
+ [(< ?name-1 ?name-2)]]
+```
+
