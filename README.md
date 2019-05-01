@@ -2,7 +2,7 @@
 
 ### ***Summary***
 
-As I followed the tutorial to practice and get into knowing how datalog language works, interestingly I found it is more convinient and concise than SQL.
+As I followed the tutorial to practice and get into knowing how datalog language works, interestingly I found it is more convenient and concise than SQL.
 
 
 
@@ -416,5 +416,38 @@ process:
  [(.getMonth ?born-1) ?m]
  [(.getMonth ?born-2) ?m]
  [(< ?name-1 ?name-2)]]
+```
+
+
+
+### 1.8 Aggregates
+
+> Aggregate functions such as `sum`, `max` etc. are readily available in Datomic's Datalog implementation. They are written in the `:find` clause in your query:
+>
+> An aggregate function collects values from multiple datoms and returns
+>
+> - A single value: `min`, `max`, `sum`, `avg`, etc.
+> - A collection of values: `(min n ?d)` `(max n ?d)` `(sample n ?e)` etc. where `n` is an integer specifying the size of the collection.
+
+
+
+***Practice1:*** count the number of movies in the database
+
+```
+[:find (count ?m)
+ :where
+ [?m :movie/title]]
+```
+
+
+
+***Practice2:*** Find the birth date of the closet person in the database
+
+```
+[:find (min ?date)
+ :where
+[_ :person/born ?date]] 
+
+// confused with '_' here
 ```
 
