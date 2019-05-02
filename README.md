@@ -451,3 +451,26 @@ process:
 // confused with '_' here
 ```
 
+
+
+### 1.9 Rules
+
+> **Rules** are the means of abstraction in Datalog. You can abstract away reusable parts of your queries into rules, give them meaningful names and forget about the implementation details, just like you can with functions in your favorite programming language.
+
+
+
+***Practice1:*** Write a rule `[movie-year ?title ?year]` where `?title` is the title of some movie and `?year` is that movies release year.
+
+```
+//Query
+[:find ?title
+ :in $ %
+ :where
+ [movie-year ?title 1991]]
+ 
+ //Rules:
+ [[(movie-year ?title ?year)
+  [?m :movie/title ?title]
+  [?m :movie/year ?year]]]
+```
+
