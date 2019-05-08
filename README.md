@@ -1,8 +1,8 @@
 # Datalog language learning.
 
-### ***Summary***
+#### ***Thoughts:***
 
-As I followed the tutorial to practice and get into knowing how datalog language works, interestingly I found it is more convenient and concise than SQL.
+As I followed the tutorial to practice and get into knowing how datalog language works, interestingly I found it is more powerful and concise than SQL.
 
 
 
